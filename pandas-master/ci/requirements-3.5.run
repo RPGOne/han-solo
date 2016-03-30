@@ -1,0 +1,23 @@
+python-dateutil
+pytz
+numpy
+openpyxl
+xlsxwriter
+xlrd
+xlwt
+scipy
+numexpr
+pytables
+html5lib
+lxml
+matplotlib
+jinja2
+bottleneck
+sqlalchemy
+pymysql
+psycopg2
+xarray
+boto
+
+# incompat with conda ATM
+# beautiful-soup

@@ -1,0 +1,170 @@
+.. _whatsnew_0181:
+
+v0.18.1 (April ??, 2016)
+------------------------
+
+This is a minor bug-fix release from 0.18.0 and includes a large number of
+bug fixes along several new features, enhancements, and performance improvements.
+We recommend that all users upgrade to this version.
+
+Highlights include:
+
+.. contents:: What's new in v0.18.1
+    :local:
+    :backlinks: none
+
+.. _whatsnew_0181.new_features:
+
+New features
+~~~~~~~~~~~~
+
+
+
+
+
+
+
+.. _whatsnew_0181.enhancements:
+
+Enhancements
+~~~~~~~~~~~~
+
+
+.. _whatsnew_0181.partial_string_indexing:
+
+Partial string indexing on ``DateTimeIndex`` when part of a ``MultiIndex``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Partial string indexing now matches on ``DateTimeIndex`` when part of a ``MultiIndex`` (:issue:`10331`)
+
+.. ipython:: python
+
+   dft2 = pd.DataFrame(np.random.randn(20, 1),
+                       columns=['A'],
+                       index=pd.MultiIndex.from_product([pd.date_range('20130101',
+                                                                       periods=10,
+                                                                       freq='12H'),
+                                                        ['a', 'b']]))
+   dft2
+   dft2.loc['2013-01-05']
+   idx = pd.IndexSlice
+   dft2 = dft2.swaplevel(0, 1).sort_index()
+   dft2.loc[idx[:, '2013-01-05'], :]
+
+.. _whatsnew_0181.other:
+
+Other Enhancements
+^^^^^^^^^^^^^^^^^^
+
+- ``pd.read_csv()`` now supports opening ZIP files that contains a single CSV, via extension inference or explict ``compression='zip'`` (:issue:`12175`)
+- ``pd.read_csv()`` now supports opening files using xz compression, via extension inference or explicit ``compression='xz'`` is specified; ``xz`` compressions is also supported by ``DataFrame.to_csv`` in the same way (:issue:`11852`)
+- ``pd.read_msgpack()`` now always gives writeable ndarrays even when compression is used (:issue:`12359`).
+
+.. _whatsnew_0181.api:
+
+API changes
+~~~~~~~~~~~
+- ``.searchsorted()`` for ``Index`` and ``TimedeltaIndex`` now accept a ``sorter`` argument to maintain compatibility with numpy's ``searchsorted`` function (:issue:`12238`)
+
+- ``Period`` and ``PeriodIndex`` now raises ``IncompatibleFrequency`` error which inherits ``ValueError`` rather than raw ``ValueError`` (:issue:`12615`)
+
+
+
+
+- ``CParserError`` is now a ``ValueError`` instead of just an ``Exception`` (:issue:`12551`)
+
+
+
+
+
+
+
+
+
+
+
+.. _whatsnew_0181.deprecations:
+
+Deprecations
+^^^^^^^^^^^^
+
+- The method name ``Index.sym_diff()`` is deprecated and can be replaced by ``Index.symmetric_difference()`` (:issue:`12591`)
+
+
+
+
+
+
+
+
+
+
+.. _whatsnew_0181.performance:
+
+Performance Improvements
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+
+
+
+
+
+
+.. _whatsnew_0181.bug_fixes:
+
+Bug Fixes
+~~~~~~~~~
+- ``usecols`` parameter in ``pd.read_csv`` is now respected even when the lines of a CSV file are not even (:issue:`12203`)
+- Bug in ``groupby.transform(..)`` when ``axis=1`` is specified with a non-monotonic ordered index (:issue:`12713`)
+- Bug in ``Period`` and ``PeriodIndex`` creation raises ``KeyError`` if ``freq="Minute"`` is specified. Note that "Minute" freq is deprecated in v0.17.0, and recommended to use ``freq="T"`` instead (:issue:`11854`)
+- Bug in printing data which contains ``Period`` with different ``freq`` raises ``ValueError`` (:issue:`12615`)
+- Bug in numpy compatibility of ``np.round()`` on a ``Series`` (:issue:`12600`)
+- Bug in ``Series`` construction with ``Categorical`` and ``dtype='category'`` is specified (:issue:`12574`)
+- Bugs in concatenation with a coercable dtype was too aggressive. (:issue:`12411`, :issue:`12045`, :issue:`11594`, :issue:`10571`)
+- Bug in ``float_format`` option with option not being validated as a callable. (:issue:`12706`)
+
+
+
+- Bug in ``Timestamp.__repr__`` that caused ``pprint`` to fail in nested structures (:issue:`12622`)
+
+
+
+
+
+- Bug in ``value_counts`` when ``normalize=True`` and ``dropna=True`` where nulls still contributed to the normalized count (:issue:`12558`)
+- Bug in ``Panel.fillna()`` ignoring ``inplace=True`` (:issue:`12633`)
+- Bug in ``Series.rename``, ``DataFrame.rename`` and ``DataFrame.rename_axis`` not treating ``Series`` as mappings to relabel (:issue:`12623`).
+- Clean in ``.rolling.min`` and ``.rolling.max`` to enhance dtype handling (:issue:`12373`)
+
+
+
+
+
+
+
+
+
+
+
+
+- Bug in ``CategoricalIndex.get_loc`` returns different result from regular ``Index`` (:issue:`12531`)
+
+
+
+
+
+
+
+
+
+- Bug in ``concat`` raises ``AttributeError`` when input data contains tz-aware datetime and timedelta (:issue:`12620`)
+
+
+
+
+- Bug in ``pivot_table`` when ``margins=True`` and ``dropna=True`` where nulls still contributed to margin count (:issue:`12577`)
+- Bug in ``Series.name`` when ``name`` attribute can be a hashable type (:issue:`12610`)
+- Bug in ``.describe()`` resets categorical columns information (:issue:`11558`)
